@@ -1,0 +1,306 @@
+EJERCICIO 1 - LINUX
+
+Punto 1) 
+
+// Asumiendo que estoy en /home/lucianocampardon (Porque es la ubicacion default cuando abris la cli), harìa los siguiente comandos:
+
+cd Documentos
+mkdir "Proyectos"
+cd Proyectos
+mkdir "TiendaOnline" "BlogPersonal" "ProyectoAppMovil"
+cd TiendaOnline
+mkdir "codigo" "documentacion" "pruebas"
+cd codigo
+mkdir "backend" "frontend" "scripts"
+cd backend
+mkdir "controllers" "models" "routes" "views"
+cd ../frontend
+mkdir "assets" "components"
+cd assets
+mkdir "css" "js"
+cd ../../../../BlogPersonal
+mkdir "articulos" "borradores" "imagenes" "plantillas"
+cd ../ProyectoAppMovil
+mkdir "android" "documentacion" "ios" "recursos"
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Punto 2) 
+
+// Asumiendo que lo ultimo que hice fue crear los directorios "android", "documentacion", "ios" y "recursos", usarìa los siguientes comandos para saber mi posicion actual:
+
+pwd
+
+// lo cual daria como resultado lo siguiente:
+
+lucianocampardon/Documentos/Proyectos/ProyectoAppMovil
+
+// y para moverme a la raiz harìa lo siguiente:
+
+cd ../../../../..
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Punto 3) 
+
+// Para copiar los archivos de una de las carpetas que cree (voy a copiar las carpetas que estan adentro assets, en concreto), usarìa el siguiente comando:
+
+cp -rv /home/lucianocampardon/Documentos/Proyectos/TiendaOnline/codigo/frontend/assets/* /home/lucianocampardon/Descargas
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Punto 4) 
+
+cd Documentos
+mkdir "Proyectos"
+cd Proyectos
+mkdir "TiendaOnline" "BlogPersonal" "ProyectoAppMovil"
+cd TiendaOnline
+mkdir "codigo" "documentacion" "pruebas"
+cd codigo
+mkdir "backend" "frontend" "scripts"
+cd backend
+mkdir "controllers" "models" "routes" "views"
+cd ../frontend
+mkdir "assets" "components"
+cd assets
+mkdir "css" "js"
+cd ../../../../BlogPersonal
+mkdir "articulos" "borradores" "imagenes" "plantillas"
+cd ../ProyectoAppMovil
+mkdir "android" "documentacion" "ios" "recursos"
+ 
+pwd
+lucianocampardon/Documentos/Proyectos/ProyectoAppMovil
+cd ../../../../..
+
+cp -rv /home/lucianocampardon/Documentos/Proyectos/TiendaOnline/codigo/frontend/assets/* /home/lucianocampardon/Descargas
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Punto 5)
+
+cd home/lucianocampardon/Descargas/css/
+touch file1.xtx file2.xtx file3.xtx
+cd ../js
+touch file1.xtx file2.xtx file3.xtx
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+EJERCICIO 2 - BASH
+
+Punto 1)
+
+import os
+
+search = True
+userChoise = ""
+
+def searchFiles(word):
+    foundFiles = []
+    currentDirectory = os.getcwd()
+    
+    for file in os.listdir(currentDirectory):
+        if os.path.isfile(file):
+            try:
+                with open(file, 'r', encoding='utf-8') as currentFile:
+                    if word.lower() in currentFile.read().lower():
+                        foundFiles.append(file)
+            except Exception as e:
+                print(f"Error leyendo {file}: {e}")
+    
+    return foundFiles
+
+def main():
+    word = input("Escribe la palabra que quieres buscar:")
+    matchingFiles = searchFiles(word)
+    
+    if matchingFiles:
+        print(f'Los archivos que contienen la palabra "{word}" son:')
+        for file in matchingFiles:
+            print(file)
+    else:
+        print(f'No se han encontrado archivos que contengan la palabra "{word}".')
+        
+        
+        
+while search == True:
+    userChoise = input("Queres buscar una palabra en los archivos del directorio local?(y/n): ").lower()
+    
+    if userChoise == "y":
+        main()
+    elif userChoise == "n":
+        search = False
+        print("Programa finalizado")
+        break
+    else:
+        print("La opcion ingresada no es valida")
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Punto 2)
+
+import os
+import shutil
+
+menu = True
+
+def displayMenu():
+    print("\nMenu:")
+    print("1) Ver los archivos en el directorio actual")
+    print("2) Copiar un archivo en el directorio actual")
+    print("3) Borrar un archivo en el directorio actual")
+    print("4) Salir")
+
+def viewFiles():
+    print("\nArchivos en el directorio actual:")
+    for file in os.listdir():
+        print(file)
+
+def copyFile():
+    fileName = input("\nIngresa el nombre del archivo que quieres copiar: ")
+    if os.path.exists(fileName):
+        newName = input("Ingresa el nombre del nuevo archivo: ")
+        shutil.copy(fileName, newName)
+        print(f"{fileName} ha sido copiado a {newName}")
+    else:
+        print(f"Error: {fileName} no existe en el directorio actual.")
+
+def deleteFile():
+    fileName = input("Ingresa el nombre del archivo que quieres borrar: ")
+    if os.path.exists(fileName):
+        os.remove(fileName)
+        print(f"{fileName} ha sido borrado.")
+    else:
+        print(f"Error: {fileName} no existe en el directorio actual.")
+
+
+
+while menu == True:
+    displayMenu()
+    choice = input("\nElige la accion que quieres realizar: ")
+
+    if choice == '1':
+        viewFiles()
+    elif choice == '2':
+        copyFile()
+    elif choice == '3':
+        deleteFile()
+    elif choice == '4':
+        print("\nPrograma finalizado")
+        menu = False
+        break
+    else:
+        print("\nLa opcion ingresada no es valida.")
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Punto 3)
+
+import re
+import sys
+import os
+
+search = True
+
+def searchAndReplace(fileToSearchOn, textToBeReplaced, replacementText): 
+    try:
+        with open(fileToSearchOn, 'r') as file:
+            targetFile = file.read()
+
+        newContent, count = re.subn(textToBeReplaced, replacementText, targetFile)
+
+        with open(fileToSearchOn, 'w') as file:
+            file.write(newContent)
+
+        if count > 0:
+            print(f"\nReemplazo completado. Se han reemplazado {count} instancias de {textToBeReplaced}.\n")
+        else:
+            print(f'No se ha encontrado ninguna instancia de "{textToBeReplaced}" en el archivo {fileToSearchOn}')
+
+    except FileNotFoundError:
+        print(f'Error: No se ha encontrado el archivo "{fileToSearchOn}".')
+    except Exception as e:
+        print(f"Ha ocurrido un error: {e}")
+
+def verifyFile():
+    while True:
+        fileToSearchOn = input("Ingresa el archivo en el cual quieres remplazar texto: ").strip()
+        
+        if os.path.isfile(fileToSearchOn):
+            return fileToSearchOn
+        else:
+            print(f'Error: No se ha encontrado el archivo "{fileToSearchOn}" en el directorio actual.')
+        
+        
+    
+while search == True:
+    userChoise = input("Quieres reemplazar texto en uno de los archivos? (y/n): ").lower()
+        
+    if userChoise == "y":
+        fileToSearchOn = verifyFile()
+        textToBeReplaced = input("Escribe el texto que quieres buscar y reemplazar en uno de los archivos del directorio: ").strip()
+        replacementText = input("Escribe el texto con el quieres reemplazar el anterior: ").strip()
+        
+        searchAndReplace(fileToSearchOn, textToBeReplaced, replacementText)
+    elif userChoise == "n":
+        search = False
+        print("Programa finalizado")
+        break
+    else:
+        print("La opcion ingresada no es valida")
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+EJERCICIO 3 - DOCKER
+
+1) EJECUTAR UN CONTENEDOR INTERACTIVO:
+
+docker run -it debian bash
+
+apt update && apt install -y htop
+
+exit
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+2) CREAR UN CONTENEDOR EN SEGUNDO PLANO:
+
+docker run -d -p 8080:80 nginx:alpine
+
+// Entrar a un browser (Yo uso Firefox en mi PC) e ingresar http://localhost:8080/ en la barra de busqueda
+
+docker logs <Container ID o Container Name>
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+3) CREAR UNA IMAGEN PERSONALIZADA:
+
+// Primero hay que crear el directorio que va a contener los archivos, ubicarme en ese directorio y crear el Dockerfile:
+
+mkdir "Ejercicio 3 - Crear una imagen personalizada"
+
+cd Ejercicio 3 - Crear una imagen personalizada
+
+touch Dockerfile
+
+// En mi caso ya tenia el archivo de una pagina web creada en un archivo HTML (lo hice hace unos años para practicar HTML), es una receta de tarta de queso con fruta 
+
+// Despues se configura el archivo Dockerfile para que configure un servidor web en nginx para servir la pagina
+
+// Se hace el comando para construir la imagen (a la cual le voy a poner el nombre de "imagen-personalizada") que se va a usar en el contenedor en base al Dockerfile que esta en este directorio:
+
+docker build -t imagen-personalizada .
+
+// Luego se hace que se ejecute el contenedor, indicandole que corra en segundo plano y mapeando el puerto de nginx a un puerto en nuestro host (yo voy a usar el puerto 8080), usando la imagen que acabo de crear
+
+docker run -d -p 8080:80 imagen-personalizada
+
+// Posteriormente, para comprobar si el servidor web esta mostrando la pagina web que le indique, hay que entrar a un browser e ingresar http://localhost:8080/ en la barra de busqueda
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
